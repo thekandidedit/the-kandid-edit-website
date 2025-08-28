@@ -18,13 +18,13 @@ export async function POST(req: Request) {
     }
 
     const resend = new Resend(resendKey)
-    await resend.emails.send({
-      from,
-      to: contactTo!,
-      reply_to: email,
-      subject: 'New enquiry — The Kandid Edit',
-      text: `Name: ${name}\nEmail: ${email}\n\n${message}`,
-    })
+   await resend.emails.send({
+  from,
+  to: contactTo,
+  replyTo: email,       // ✅ correct
+  subject: 'New enquiry — The Kandid Edit',
+  text: `Name: ${name}\nEmail: ${email}\n\n${message}`,
+});
 
     return NextResponse.json({ ok: true })
   } catch {
