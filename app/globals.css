@@ -1,43 +1,57 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-:root { --bg:#0b0b0b; --fg:#fff; --muted:#a3a3a3; --primary:#eab308; }
-body { background:var(--bg); color:var(--fg); }
-.section {
+/* Theme tokens */
+:root { --bg:#0b0b0b; --fg:#ffffff; --muted:#a3a3a3; --primary:#eab308; }
+
+html, body { height: 100%; }
+body { background: var(--bg); color: var(--fg); }
+
+/* Layout container (Tailwind v4: don't @apply responsive utilities) */
 .section {
   margin-left: auto;
   margin-right: auto;
-  padding-left: 1rem;   /* px-4 */
-  padding-right: 1rem;
   width: 100%;
+  padding-left: 1rem;  /* px-4 */
+  padding-right: 1rem; /* px-4 */
 }
 
 @media (min-width: 768px) {
-  .section {
-    padding-left: 2rem;   /* px-8 */
-    padding-right: 2rem;
-  }
+  .section { padding-left: 2rem; padding-right: 2rem; } /* md:px-8 */
 }
 
 @media (min-width: 1536px) {
-  .section {
-    max-width: 72rem;   /* 6xl */
-  }
+  .section { max-width: 72rem; } /* max-w-6xl */
 }
 
-@media (min-width: 768px) {
-  .section {
-    @apply px-8;
-  }
+/* Replacements for the small utility classes we used via @apply */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 9999px;
+  border: 1px solid rgba(255,255,255,0.2);
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: .08em;
 }
-.card { @apply rounded-2xl border border-white/10 bg-white/5 backdrop-blur; }
-.btn { @apply inline-flex items-center justify-center rounded-2xl px-4 py-2 text-sm font-medium transition; }
-.btn-primary { @apply btn bg-yellow-500/90 hover:bg-yellow-500 text-black; }
-.btn-outline { @apply btn border border-white/20 hover:bg-white/10; }
-.pill { @apply inline-flex items-center rounded-full border border-white/20 px-3 py-1 text-xs; }
-.muted { color:var(--muted); }
-h1,h2,h3 { @apply font-bold; }
-h1 { @apply text-4xl md:text-6xl leading-tight; }
-h2 { @apply text-3xl md:text-4xl; }
-a { @apply hover:opacity-80; }
+
+.card {
+  border-radius: 1rem;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(8px);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  border-radius: 1rem;
+  padding: .5rem 1rem;
+  font-weight: 500;
+  background: rgba(255,255,255,0.10);
+  transition: background .2s ease;
+}
+.btn:hover { background: rgba(255,255,255,0.20); }
+
+.muted { color: var(--muted); }
