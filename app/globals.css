@@ -4,7 +4,15 @@
 
 :root { --bg:#0b0b0b; --fg:#fff; --muted:#a3a3a3; --primary:#eab308; }
 body { background:var(--bg); color:var(--fg); }
-.section { @apply mx-auto w-full max-w-6xl px-4 py-20 md:px-8; }
+.section {
+  @apply max-w-6xl mx-auto px-4;
+}
+
+@media (min-width: 768px) {
+  .section {
+    @apply px-8;
+  }
+}
 .card { @apply rounded-2xl border border-white/10 bg-white/5 backdrop-blur; }
 .btn { @apply inline-flex items-center justify-center rounded-2xl px-4 py-2 text-sm font-medium transition; }
 .btn-primary { @apply btn bg-yellow-500/90 hover:bg-yellow-500 text-black; }
