@@ -2,7 +2,11 @@
   "name": "kandid-edit-site",
   "version": "1.0.0",
   "private": true,
-  "scripts": { "dev": "next dev", "build": "next build", "start": "next start" },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
   "dependencies": {
     "framer-motion": "latest",
     "lucide-react": "latest",
@@ -12,9 +16,10 @@
     "resend": "latest"
   },
   "devDependencies": {
-  "autoprefixer": "latest",
-  "postcss": "latest",
-  "tailwindcss": "latest",
-  "typescript": "latest",
-  "@tailwindcss/postcss": "latest"
+    "autoprefixer": "latest",
+    "postcss": "latest",
+    "tailwindcss": "latest",
+    "typescript": "latest",
+    "@tailwindcss/postcss": "latest"
+  }
 }
