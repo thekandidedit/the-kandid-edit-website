@@ -5,8 +5,24 @@ import { Card } from '../components/ui/Card'
 import { ArrowRight, Camera, Palette, Presentation, Link as LinkIcon, Check } from 'lucide-react'
 import { useState } from 'react'
 
-const container = { hidden:{opacity:0,y:20}, show:{opacity:1,y:0, transition:{staggerChildren:0.06, ease:'easeOut', duration:0.5}} }
-const item = { hidden:{opacity:0,y:10}, show:{opacity:1,y:0} }
+import { easeOut } from "framer-motion"; // add at top
+
+const container = {
+  hidden: { opacity: 0, y: 20 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      staggerChildren: 0.06,
+      ease: easeOut,   // ✅ function
+      duration: 0.5,
+    },
+  },
+};
+const item: Variants = {
+  hidden: { opacity: 0, y: 10 },
+  show:   { opacity: 1, y: 0 },
+};
 
 function Pill({children}:{children: React.ReactNode}) {
   return <span className='pill'>{children}</span>
