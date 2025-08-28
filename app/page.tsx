@@ -1,166 +1,100 @@
-'use client';
+'use client'
 
-import { motion, easeOut } from 'framer-motion';
-import type { Variants } from 'framer-motion';
-import { Button } from '../components/ui/Button';
-import { Card } from '../components/ui/Card';
-import { useState, type FormEvent, type ReactNode } from 'react';
-
-/* Animation variants */
-const container: Variants = {
-  hidden: { opacity: 0, y: 20 },
-  show: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      staggerChildren: 0.06,
-      ease: easeOut, // function, not string
-      duration: 0.5,
-    },
-  },
-};
-
-const item: Variants = {
-  hidden: { opacity: 0, y: 10 },
-  show:   { opacity: 1, y: 0 },
-};
-
-/* Small UI helpers */
-function Pill({ children }: { children: ReactNode }) {
-  return <span className="pill">{children}</span>;
-}
-
-function Section({
-  id,
-  title,
-  subtitle,
-  children,
-}: {
-  id: string;
-  title: string;
-  subtitle?: string;
-  children: ReactNode;
-}) {
-  return (
-    <section id={id} className="section">
-      <motion.div
-        variants={container}
-        initial="hidden"
-        whileInView="show"
-        viewport={{ once: true, margin: '-80px' }}
-      >
-        <motion.h2 variants={item} className="mb-2">
-          {title}
-        </motion.h2>
-        {subtitle && (
-          <motion.p variants={item} className="mb-10 max-w-2xl muted">
-            {subtitle}
-          </motion.p>
-        )}
-        <motion.div variants={item}>{children}</motion.div>
-      </motion.div>
-    </section>
-  );
-}
+import { useEffect, useState } from 'react'
+import { ArrowRight, Instagram, Mail } from 'lucide-react'
 
 export default function Page() {
-  const [sending, setSending] = useState(false);
-  const [ok, setOk] = useState<boolean | null>(null);
+  // OPTIONAL: countdown target (change or remove)
+  const launch = new Date()
+  launch.setMonth(launch.getMonth() + 1) // +1 month
 
-  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    const fd = new FormData(e.currentTarget);
-    setSending(true);
-    setOk(null);
-    try {
-      const res = await fetch('/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: fd.get('name'),
-          email: fd.get('email'),
-          message: fd.get('message'),
-        }),
-      });
-      const j = await res.json();
-      setOk(j.ok);
-      if (j.ok) e.currentTarget.reset();
-    } finally {
-      setSending(false);
-    }
-  }
+  const [left, setLeft] = useState<number>(launch.getTime() - Date.now())
+  useEffect(() => {
+    const id = setInterval(() => setLeft(launch.getTime() - Date.now()), 1000)
+    return () => clearInterval(id)
+  }, [launch])
+
+  const d = Math.max(0, Math.floor(left / (1000 * 60 * 60 * 24)))
+  const h = Math.max(0, Math.floor((left / (1000 * 60 * 60)) % 24))
+  const m = Math.max(0, Math.floor((left / (1000 * 60)) % 60))
+  const s = Math.max(0, Math.floor((left / 1000) % 60))
 
   return (
-    <div className="min-h-screen">
-      <header className="sticky top-0 z-50 backdrop-blur bg-black/20">
-        <div className="section py-4 flex items-center justify-between">
-          <a href="#home" className="font-semibold flex items-center gap-2">
-            <span>✨</span>
-            <span>The Kandid Edit</span>
-          </a>
-          <nav className="hidden md:flex gap-6 text-sm">
-            <a href="#services">Services</a>
-            <a href="#packages">Packages</a>
-            <a href="#work">Work</a>
-            <a href="#about">About</a>
-            <a href="#contact">Contact</a>
-          </nav>
-          <div className="hidden md:block">
-            <a href="#contact">
-              <Button>Get a Quote</Button>
-            </a>
+    <main className="relative min-h-screen overflow-hidden text-white">
+      {/* animated gradient background */}
+      <div className="pointer-events-none absolute inset-0">
+        <div className="animate-blob absolute -top-40 -left-32 h-96 w-96 rounded-full bg-gradient-to-br from-amber-500/40 to-pink-500/40 blur-3xl" />
+        <div className="animate-blob animation-delay-2000 absolute -bottom-24 -right-24 h-[28rem] w-[28rem] rounded-full bg-gradient-to-tr from-purple-500/40 to-cyan-500/40 blur-3xl" />
+        <div className="animate-blob animation-delay-4000 absolute top-1/3 left-1/2 h-80 w-80 -translate-x-1/2 rounded-full bg-gradient-to-tr from-lime-400/30 to-sky-500/30 blur-3xl" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(255,255,255,0.06),transparent_45%)]" />
+      </div>
+
+      {/* content */}
+      <div className="relative z-10 flex min-h-screen items-center justify-center px-4">
+        <div className="mx-auto w-full max-w-3xl rounded-2xl border border-white/10 bg-white/5 p-8 backdrop-blur-xl shadow-2xl">
+          <div className="mb-6 text-center">
+            <p className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs uppercase tracking-wider text-white/70">
+              <span className="h-1.5 w-1.5 rounded-full bg-amber-400" />
+              Coming Soon
+            </p>
+            <h1 className="mt-6 font-[var(--font-serif)] text-4xl leading-tight md:text-6xl">
+              The Kandid Edit
+            </h1>
+            <p className="mt-3 text-lg text-white/70 md:text-xl">
+              Elegant edits for ambitious creators & brands.
+            </p>
           </div>
+
+          {/* countdown */}
+          <div className="mx-auto mb-8 grid w-full max-w-xl grid-cols-4 gap-3">
+            {[
+              { label: 'Days', value: d },
+              { label: 'Hours', value: h },
+              { label: 'Minutes', value: m },
+              { label: 'Seconds', value: s },
+            ].map(({ label, value }) => (
+              <div
+                key={label}
+                className="rounded-xl border border-white/10 bg-black/30 py-4 text-center"
+              >
+                <div className="text-3xl font-semibold tabular-nums">{String(value).padStart(2, '0')}</div>
+                <div className="mt-1 text-xs uppercase tracking-wide text-white/60">{label}</div>
+              </div>
+            ))}
+          </div>
+
+          {/* CTA row */}
+          <div className="flex flex-col items-center justify-center gap-3 md:flex-row">
+            <a
+              href="mailto:thekandidedit@gmail.com?subject=Project%20Enquiry%20—%20The%20Kandid%20Edit"
+              className="group inline-flex items-center justify-center gap-2 rounded-xl bg-white px-5 py-3 font-medium text-black transition hover:brightness-95"
+            >
+              Get in touch <ArrowRight className="size-4 transition group-hover:translate-x-0.5" />
+            </a>
+            <div className="flex items-center gap-2">
+              <a
+                aria-label="Email"
+                href="mailto:thekandidedit@gmail.com"
+                className="rounded-xl border border-white/15 bg-white/10 p-3 text-white/80 transition hover:bg-white/20"
+              >
+                <Mail className="size-5" />
+              </a>
+              <a
+                aria-label="Instagram"
+                href="https://instagram.com/"
+                target="_blank"
+                className="rounded-xl border border-white/15 bg-white/10 p-3 text-white/80 transition hover:bg-white/20"
+              >
+                <Instagram className="size-5" />
+              </a>
+            </div>
+          </div>
+
+          <p className="mt-6 text-center text-xs text-white/50">
+            © {new Date().getFullYear()} The Kandid Edit — All rights reserved.
+          </p>
         </div>
-      </header>
-
-      {/* Hero / services / packages sections can go here */}
-
-      <Section
-        id="contact"
-        title="Let’s build something"
-        subtitle="Tell us about your project. We’ll reply quickly."
-      >
-        <Card className="p-6">
-          <form onSubmit={handleSubmit} className="grid gap-4 md:grid-cols-2">
-            <div>
-              <label className="block text-sm mb-1">Name</label>
-              <input
-                name="name"
-                required
-                className="w-full rounded-xl border border-white/20 bg-white/5 p-2"
-              />
-            </div>
-            <div>
-              <label className="block text-sm mb-1">Email</label>
-              <input
-                type="email"
-                name="email"
-                required
-                className="w-full rounded-xl border border-white/20 bg-white/5 p-2"
-              />
-            </div>
-            <div className="md:col-span-2">
-              <label className="block text-sm mb-1">Project Details</label>
-              <textarea
-                name="message"
-                rows={6}
-                className="w-full rounded-xl border border-white/20 bg-white/5 p-2"
-              />
-            </div>
-            <div className="md:col-span-2 flex justify-end">
-              <Button type="submit">{sending ? 'Sending…' : 'Send enquiry'}</Button>
-            </div>
-            {ok === true && (
-              <p className="text-green-400 text-sm">
-                Thanks! We’ll get back to you shortly.
-              </p>
-            )}
-            {ok === false && (
-              <p className="text-red-400 text-sm">Something went wrong. Try again.</p>
-            )}
-          </form>
-        </Card>
-      </Section>
-    </div>
-  );
+      </div>
+    </main>
+  )
 }
